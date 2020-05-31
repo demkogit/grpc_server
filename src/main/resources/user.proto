@@ -1,0 +1,178 @@
+syntax = "proto3";
+
+package generated;
+
+// Ответ
+message APIResponse {
+	bool error = 1;
+	string msg = 2;
+}
+
+// Запрос регистрации
+message RegistrationRequest {
+	string firstName = 1;
+	string lastName = 2;
+	string login = 3;
+	string password = 4;
+}
+
+// Запрос регистрации
+message LoginRequest {
+	string login = 1;
+	string password = 2;
+}
+
+message LoginResponse {
+	bool error = 1;
+	string msg = 2;
+	string token = 3;
+	int32 id = 4;
+}
+
+message LogoutRequest {
+	int32 id = 1;
+}
+
+message ReverseRequest {
+	string inputStr = 1;
+}
+
+message GetNoteListRequest {
+	string token = 1;
+}
+
+message Note {
+	int32 id = 1;
+	string authFirstName = 2;
+	string authLastName = 3;
+	int32 likeAmount = 4;
+	string content = 5;
+	int32 commentAmount = 6;
+}
+
+message GetNoteListResponse {
+	repeated Note note = 1;
+}
+
+message CreateNoteRequest {
+	int32 userid = 1;
+	string content = 2;
+}
+
+message SetLikeRequest {
+	int32 noteid = 1;
+	int32 userid = 2;
+}
+
+message CreateCommentRequest {
+	int32 userid = 1;
+	int32 noteid = 2;
+	string content = 3;
+}
+
+message GetCommentListRequest {
+	int32 noteid = 1;
+}
+
+message Comment {
+	string firstName = 1;
+	string lastName = 2;
+	string text = 3;
+}
+
+message GetCommentListResponse {
+	bool error = 1;
+	string msg = 2;
+	repeated Comment comment = 3;
+}
+
+message SendMessageRequest {
+	int32 userid = 1;
+	int32 compid = 2;
+	string content = 3;
+}
+
+message GetCorrespListRequest {
+	int32 userid = 1;
+}
+
+message Corresp {
+	int32 id = 1;
+	string name = 2;
+}
+
+message GetCorrespListResponse {
+	repeated Corresp corresp = 1;
+}
+
+message GetMessageListRequest {
+	int32 correspid = 1;
+}
+
+message Message {
+	string firstName = 1;
+	string lastName = 2;
+	string msg = 3;
+	string date = 4;
+}
+
+message GetMessageListResponse {
+	bool error = 1;
+	string msge= 2;
+	repeated Message msg = 3;
+}
+
+message EmptyRequest {
+}
+
+message UserDB {
+	int32 id = 1;
+	string firstName = 2;
+	string lastName = 3;
+}
+
+message GetUserListResponse {
+	repeated UserDB user = 1;
+}
+
+service UserService {
+// получение реверсированной строки
+	rpc reverse (ReverseRequest) returns (APIResponse);
+
+	// регистрация
+	rpc registration (RegistrationRequest) returns (APIResponse);
+
+	// авторизация
+	rpc login (LoginRequest) returns (LoginResponse);
+
+	// выход
+	rpc logout (LogoutRequest) returns (APIResponse);
+
+	// получить список постов
+	rpc getNoteList (GetNoteListRequest) returns (GetNoteListResponse);
+
+	// создать пост
+	rpc createNote (CreateNoteRequest) returns (APIResponse);
+
+	// убрать/поставить лайк
+	rpc setLike (SetLikeRequest) returns (APIResponse);
+
+	// создать комментарий
+	rpc createComment (CreateCommentRequest) returns (APIResponse);
+
+	// получить список комментариев
+	rpc getCommentList (GetCommentListRequest) returns (GetCommentListResponse);
+
+	// отправить сообщение
+	rpc sendMessage (SendMessageRequest) returns (APIResponse);
+
+	// получить список пользователей
+	rpc getUserList (EmptyRequest) returns (GetUserListResponse);
+
+	// получить список переписок
+	rpc getCorrespList (GetCorrespListRequest) returns (GetCorrespListResponse);
+
+	// получить список сообщений
+	rpc getMessageList (GetMessageListRequest) returns (GetMessageListResponse);
+}
+
